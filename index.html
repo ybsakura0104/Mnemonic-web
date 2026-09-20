@@ -30,11 +30,14 @@
     background-image:url('assets/img/title_bg.png'); background-size:cover; background-position:center;
   }
   #titleLogo{
-    position:absolute; left:1340px; top:464px; width:513px; height:108px;
-    background-image:url('assets/img/title_logo.png'); background-size:contain; background-repeat:no-repeat;
+    /* title_logo.png는 title_bg.png와 동일한 1920x1080 캔버스에 이미 올바른 위치로
+       배치되어 있는 에셋이라, 자르거나 옮기지 않고 캔버스 그대로 풀오버레이 */
+    position:absolute; inset:0;
+    background-image:url('assets/img/title_logo.png'); background-size:100% 100%; background-repeat:no-repeat;
   }
   #startBtn{
-    position:absolute; left:1340px; top:596px; width:513px;
+    /* 로고 실측 위치(x1332~1864,y455~585) 바로 아래, 우측 정렬 */
+    position:absolute; left:1332px; top:605px; width:532px;
     text-align:right;
     font-family:var(--font-kr); font-size:22px; letter-spacing:2px;
     color:#dfe6f5; cursor:pointer;
@@ -51,11 +54,15 @@
   /* ================= 캐릭터 ================= */
   #charLayer{ position:absolute; inset:0; z-index:10; pointer-events:none; }
   .char-sprite{
-    position:absolute; bottom:0px; width:420px;
+    /* 원본 캔버스에서 투명 여백만 트리밍(픽셀 손실 없음)한 이미지를 사용 */
+    position:absolute; bottom:0px; width:380px;
     opacity:0; transform:translate(-50%,12px);
     filter:brightness(0.42) saturate(0.55);
     transition:opacity .35s ease, transform .35s ease, filter .3s ease, left .4s ease;
   }
+  /* 주인공 신규 이미지: 폭을 더 키우고, 원본 높이의 절반(상반신)만 보이도록
+     컨테이너 높이를 제한 + overflow:hidden으로 하단(다리/발)은 잘라냄 */
+  .char-sprite[data-id="player"]{ width:480px; height:800px; overflow:hidden; }
   .char-sprite.on{ opacity:1; transform:translate(-50%,0); }
   .char-sprite.active{ filter:brightness(1) saturate(1); }
   .char-sprite img{ width:100%; display:block; filter:drop-shadow(0 10px 18px rgba(0,0,0,.45)); }
@@ -91,27 +98,26 @@
 
   /* ================= 초상화 ================= */
   #portrait{
-    position:absolute; z-index:40; left:30px; bottom:60px;
-    width:280px; height:280px; overflow:hidden;
+    position:absolute; z-index:40; left:100px; bottom:140px;
+    width:300px; height:300px; overflow:hidden;
     background-size:cover; background-position:top center;
     opacity:0; transition:opacity .2s ease;
     filter:drop-shadow(0 8px 16px rgba(0,0,0,.5));
   }
   #portrait.on{ opacity:1; }
 
-  /* ================= UI_2 (이름표 배경판, 에셋 없어 CSS 대체) ================= */
+  /* ================= UI_2 (이름표 테이프) — 신규 에셋도 1920x1080 풀캔버스라 그대로 오버레이 ================= */
   #nameTag{
-    position:absolute; z-index:45; left:40px; bottom:14px;
-    width:230px; height:70px;
+    position:absolute; inset:0; z-index:45;
     background-image:url('assets/img/ui2.png'); background-size:100% 100%; background-repeat:no-repeat;
-    display:flex; align-items:center; justify-content:center;
-    opacity:0; transition:opacity .2s ease;
+    opacity:0; transition:opacity .2s ease; pointer-events:none;
   }
   #nameTag.on{ opacity:1; }
 
-  /* ================= 이름 텍스트 ================= */
+  /* ================= 이름 텍스트 — 테이프 실측 중심(94~399, 895~1047)에 배치 ================= */
   #speakerName{
-    position:relative; z-index:50;
+    position:absolute; z-index:50;
+    left:246px; top:971px; transform:translate(-50%,-50%);
     font-family:var(--font-kr); font-weight:700; font-size:24px;
     color:#2A2620; letter-spacing:1px; white-space:nowrap;
   }
@@ -145,54 +151,38 @@
   #escBgLayer.on{ opacity:.88; pointer-events:auto; }
 
   #escPanel{
-    position:absolute; z-index:96;
-    left:555px; top:65px; width:809px; height:979px;
-    background-image:url('assets/img/ui_esc.png'); background-size:contain; background-repeat:no-repeat;
+    /* ui_esc.png도 1920x1080 캔버스에 이미 올바르게 배치된 에셋이라 그대로 풀오버레이 */
+    position:absolute; inset:0; z-index:96;
+    background-image:url('assets/img/ui_esc.png'); background-size:100% 100%; background-repeat:no-repeat;
     opacity:0; transform:translateY(14px); pointer-events:none;
     transition:opacity .25s ease, transform .25s ease;
   }
   #escPanel.on{ opacity:1; transform:translateY(0); pointer-events:auto; }
 
   #escPhoto{
-    position:absolute; left:132px; top:158px; width:198px; height:203px;
+    position:absolute; left:690px; top:208px; width:200px; height:207px;
     background-size:cover; background-position:top center; border-radius:2px;
   }
-  #escInfo{
-    position:absolute; left:364px; top:161px; width:396px;
-    font-size:17px; line-height:1.85; color:var(--ink);
-  }
-  #escInfo b{ display:inline-block; width:88px; }
   .escCore{
-    position:absolute; width:103px; height:103px; top:454px;
+    position:absolute; width:104px; height:104px; top:503px;
     display:flex; align-items:center; justify-content:center;
     color:#EFE6D0; font-family:var(--font-kr); font-size:26px;
   }
-  #escCore1{ left:166px; } #escCore2{ left:357px; } #escCore3{ left:549px; }
+  #escCore1{ left:724px; } #escCore2{ left:915px; } #escCore3{ left:1106px; }
 
-  /* 기타 옵션 (좌측 1칸, 실측상 안쪽 분리선이 없어 한 박스에 두 라벨을 배치) */
-  .escLeftLabel{
-    position:absolute; left:156px; width:227px;
-    font-size:13.5px; color:var(--ink); line-height:1.5;
+  /* 다시 시작하기 / 처음으로 버튼 — 사진 우측(기존 신상정보 자리)으로 이동 */
+  .escMenuBtn{
+    position:absolute; left:950px; width:290px; height:56px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-kr); font-size:18px; color:var(--ink);
+    border:1.5px solid rgba(42,38,32,.35); border-radius:4px;
+    background:rgba(255,255,255,0.25);
+    cursor:pointer; pointer-events:auto;
+    transition:background .15s ease;
   }
-  #escLeftLabel1{ top:613px; }
-  #escLeftLabel2{ top:778px; border-top:1px solid rgba(42,38,32,.15); padding-top:10px; }
-  .escLeftLabel .sub{ display:block; margin-top:4px; font-size:11px; color:#8a7f6a; }
-
-  /* 세이브 파일 (우측) */
-  #escSaveHeader{
-    position:absolute; left:435px; top:613px;
-    font-size:14px; font-weight:700; color:var(--ink);
-  }
-  .escSaveRow{
-    position:absolute; left:435px; width:233px; height:56px;
-    display:flex; flex-direction:column; justify-content:center; gap:2px;
-    padding:0 4px;
-  }
-  #escSaveRow1{ top:654px; }
-  #escSaveRow2{ top:738px; }
-  #escSaveRow3{ top:810px; border-top:1px solid rgba(42,38,32,.15); padding-top:8px; }
-  .escSaveRow .slotTag{ font-size:9.5px; color:#8a7f6a; letter-spacing:1px; }
-  .escSaveRow .slotLine{ display:flex; justify-content:space-between; font-size:13px; color:var(--ink); }
+  .escMenuBtn:hover{ background:rgba(184,147,90,0.25); }
+  #escBtnRestart{ top:210px; }
+  #escBtnTitle{ top:280px; }
 
   /* ================= 트랜지션 ================= */
   #transitionOverlay{
@@ -238,27 +228,12 @@
     <div id="escBgLayer"></div>
     <div id="escPanel">
       <div id="escPhoto"></div>
-      <div id="escInfo"></div>
       <div class="escCore" id="escCore1">?</div>
       <div class="escCore" id="escCore2">?</div>
       <div class="escCore" id="escCore3">?</div>
 
-      <div class="escLeftLabel" id="escLeftLabel1">또 뭔 내용 들어가면 좋을까요<span class="sub">(추가 예정)</span></div>
-      <div class="escLeftLabel" id="escLeftLabel2">여기에는 뭔 내용이 들어가면 좋을까요<span class="sub">(추가 예정)</span></div>
-
-      <div id="escSaveHeader">세이브 파일</div>
-      <div class="escSaveRow" id="escSaveRow1">
-        <span class="slotTag">SAVE 1</span>
-        <span class="slotLine"><span>파일 저장명</span><span>00:00</span></span>
-      </div>
-      <div class="escSaveRow" id="escSaveRow2">
-        <span class="slotTag">SAVE 2</span>
-        <span class="slotLine"><span>파일 저장명</span><span>00:00</span></span>
-      </div>
-      <div class="escSaveRow" id="escSaveRow3">
-        <span class="slotTag">SAVE 3</span>
-        <span class="slotLine"><span>파일 저장명</span><span>00:00</span></span>
-      </div>
+      <div class="escMenuBtn" id="escBtnRestart">다시 시작하기</div>
+      <div class="escMenuBtn" id="escBtnTitle">이어하기</div>
     </div>
 
     <div id="transitionOverlay"><span id="transitionLabel"></span></div>
@@ -267,12 +242,13 @@
 
 <audio id="bgm" loop src="assets/audio/bgm.mp3" style="display:none"></audio>
 <audio id="titleBgm" loop src="assets/audio/title.mp3" style="display:none"></audio>
+<audio id="typeSfx" loop src="assets/audio/typewriter.mp3" style="display:none"></audio>
 
 <script>
 /* ===========================================================
    캔버스 배율 (에셋 원본 해상도 1456x840 기준)
    =========================================================== */
-const BASE_W = 1920, BASE_H = 1108; /* 배경 이미지 원본 비율(1456:840)에 맞춤 */
+const BASE_W = 1920, BASE_H = 1080; /* 신규 UI 에셋(title/ui1/ui2/ui_esc 등)이 전부 1920x1080 원본이라 이에 맞춤 */
 const MIN_SCALE = 0.4, MAX_SCALE = 1.4;
 const stageEl = document.getElementById('stage');
 const viewportEl = document.getElementById('viewport');
@@ -300,10 +276,10 @@ const titleBgm = document.getElementById('titleBgm');
 bgm.volume = 0.55;
 titleBgm.volume = 0.6;
 function tryPlayTitleBgm(){ titleBgm.play().catch((e)=>console.warn('타이틀 BGM 자동재생 차단됨:', e)); }
-tryPlayTitleBgm(); // 우선 즉시 시도 (자동재생 정책에 막히면 아래 폴백이 처리)
-// 브라우저가 자동재생을 막았을 경우, 페이지 첫 클릭(단 '시작하기' 버튼 제외)에서 재생 시도
-window.addEventListener('pointerdown', (e)=>{
-  if(e.target.closest('#startBtn')) return;
+tryPlayTitleBgm(); // 우선 즉시 시도 (대부분 브라우저 정책에 막힘 — 아래 폴백이 실질적으로 재생시킴)
+// 브라우저가 자동재생을 막았을 경우, 페이지에서의 첫 클릭/터치(어디든, '시작하기' 포함)에서 재생 시도.
+// '시작하기'를 눌러도 무방 — 그 클릭 핸들러가 titleBgm을 바로 정지시키므로 겹치지 않음.
+window.addEventListener('pointerdown', ()=>{
   if(!document.getElementById('titleScreen').classList.contains('hidden')) tryPlayTitleBgm();
 }, { once:true });
 document.getElementById('fsBtn').addEventListener('click', ()=>{
@@ -368,7 +344,7 @@ function applyBackground(key){
    캐릭터 정의
    =========================================================== */
 const CHARACTERS = {
-  player: { name:'주인공', portrait:'assets/img/char_player.png' },
+  player: { name:'주인공', portrait:'assets/img/char_player_sd.png' }, /* 초상화/ESC 사진은 당분간 기존 SD 이미지 유지 */
   client: { name:'이소윤 (의뢰인)', portrait:'assets/img/char_client.png', age:'21세', reason:"어릴 적 가족과의 나쁜 기억 소거", done:'미완료' },
   youngClient: { name:'어린 이소윤', portrait:null },
 };
@@ -387,7 +363,6 @@ function setActiveSpeaker(id){
    =========================================================== */
 let currentCase = 'client'; // 현재 챕터의 의뢰인 id
 const escPhoto = document.getElementById('escPhoto');
-const escInfo = document.getElementById('escInfo');
 const escBgLayer = document.getElementById('escBgLayer');
 const escPanel = document.getElementById('escPanel');
 let escOpen = false;
@@ -395,19 +370,12 @@ let escOpen = false;
 function refreshEscPanel(){
   const c = charOf(currentCase);
   escPhoto.style.backgroundImage = c.portrait ? `url('${c.portrait}')` : 'none';
-  escInfo.innerHTML = `
-    <div><b>이름</b> ${c.name.replace(/\s*\(.*\)/,'')}</div>
-    <div><b>나이</b> ${c.age||'?'}</div>
-    <div style="margin-top:6px;"><b>방문 사유</b></div>
-    <div style="color:#5C5342;">${c.reason||'-'}</div>
-    <div style="margin-top:10px;"><b>소거 완료</b> ${c.done||'미완료'}</div>
-  `;
 }
 function toggleEsc(force){
   escOpen = typeof force === 'boolean' ? force : !escOpen;
   escBgLayer.classList.toggle('on', escOpen);
   escPanel.classList.toggle('on', escOpen);
-  if(escOpen) refreshEscPanel();
+  if(escOpen){ refreshEscPanel(); stopTypeSfx(); }
 }
 document.getElementById('escBtn').addEventListener('click', (e)=>{ e.stopPropagation(); toggleEsc(); });
 escBgLayer.addEventListener('click', (e)=>{ if(e.target===escBgLayer) toggleEsc(false); });
@@ -488,6 +456,7 @@ const SCRIPT = [
 
   { cmd:'transition', label:'챕터 1', bg:'counsel' },
 
+  { cmd:'showCharacter', id:'player', pos:'left' },
   { cmd:'showCharacter', id:'client', pos:'right' },
   { cmd:'say', id:'player', text:'○○씨, 맞습니까? 전에 전화주셨던, 네, 이쪽으로 앉으시면 됩니다.' },
   { cmd:'narration', text:'사무실 안쪽의 소파로 자리를 안내한다.' },
@@ -624,12 +593,24 @@ function runCommand(step){
   }
 }
 
+const typeSfx = document.getElementById('typeSfx');
+typeSfx.volume = 0.45;
+function startTypeSfx(){
+  typeSfx.currentTime = 0;
+  typeSfx.play().catch(()=>{});
+}
+function stopTypeSfx(){
+  typeSfx.pause();
+  typeSfx.currentTime = 0;
+}
+
 function typeText(full){
   typing = true; nextIndicator.classList.remove('show'); dlgTextEl.textContent='';
   let i=0; clearInterval(typeTimer);
+  startTypeSfx();
   typeTimer = setInterval(()=>{
     dlgTextEl.textContent = full.slice(0, ++i);
-    if(i>=full.length){ clearInterval(typeTimer); typing=false; nextIndicator.classList.add('show'); }
+    if(i>=full.length){ clearInterval(typeTimer); typing=false; nextIndicator.classList.add('show'); stopTypeSfx(); }
   }, 24);
 }
 
@@ -640,7 +621,7 @@ function advance(){
   if(interactActive) return;
   const step = SCRIPT[idx];
   if(step && (step.cmd==='say' || step.cmd==='narration')){
-    if(typing){ clearInterval(typeTimer); dlgTextEl.textContent=step.text; typing=false; nextIndicator.classList.add('show'); return; }
+    if(typing){ clearInterval(typeTimer); dlgTextEl.textContent=step.text; typing=false; nextIndicator.classList.add('show'); stopTypeSfx(); return; }
     idx++; runNext(); return;
   }
 }
@@ -652,6 +633,32 @@ interactBtn.addEventListener('click', ()=>{
   interactActive = false;
   interactBtn.classList.remove('on');
   idx++; runNext();
+});
+
+/* ===========================================================
+   ESC 메뉴 하단 버튼: 다시 시작하기 / 이어하기(그냥 닫기)
+   =========================================================== */
+function resetSceneState(){
+  clearInterval(typeTimer);
+  typing = false;
+  interactActive = false;
+  interactBtn.classList.remove('on');
+  document.querySelectorAll('.char-sprite').forEach(el=>el.classList.remove('on','active'));
+  hideDialogueBox();
+  document.getElementById('endCard')?.classList.remove('on');
+}
+
+document.getElementById('escBtnRestart').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  toggleEsc(false);
+  resetSceneState();
+  idx = 0;
+  runNext();
+});
+
+document.getElementById('escBtnTitle').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  toggleEsc(false); // 이어하기: 별도 리셋 없이 ESC 창만 닫고 하던 대사 그대로 이어감
 });
 </script>
 </body>
