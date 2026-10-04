@@ -63,6 +63,8 @@
   /* 주인공 신규 이미지: 폭을 더 키우고, 원본 높이의 절반(상반신)만 보이도록
      컨테이너 높이를 제한 + overflow:hidden으로 하단(다리/발)은 잘라냄 */
   .char-sprite[data-id="player"]{ width:480px; height:800px; overflow:hidden; }
+  /* 의뢰인 전신 이미지: 주인공과 같은 배율(원본 비율 기준)로 상반신만 노출 */
+  .char-sprite[data-id="client"]{ width:400px; height:800px; overflow:hidden; }
   .char-sprite.on{ opacity:1; transform:translate(-50%,0); }
   .char-sprite.active{ filter:brightness(1) saturate(1); }
   .char-sprite img{ width:100%; display:block; filter:drop-shadow(0 10px 18px rgba(0,0,0,.45)); }
@@ -345,7 +347,7 @@ function applyBackground(key){
    =========================================================== */
 const CHARACTERS = {
   player: { name:'주인공', portrait:'assets/img/char_player_sd.png' }, /* 초상화/ESC 사진은 당분간 기존 SD 이미지 유지 */
-  client: { name:'이소윤 (의뢰인)', portrait:'assets/img/char_client.png', age:'21세', reason:"어릴 적 가족과의 나쁜 기억 소거", done:'미완료' },
+  client: { name:'이소윤 (의뢰인)', portrait:'assets/img/char_client_sd.png', age:'21세', reason:"어릴 적 가족과의 나쁜 기억 소거", done:'미완료' },
   youngClient: { name:'어린 이소윤', portrait:null },
 };
 const UNKNOWN = { name:'???', portrait:null };
